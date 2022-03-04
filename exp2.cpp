@@ -12,79 +12,73 @@ FILE *fp;
 
 
 
-void viewHistory()
-{
+void viewHistory() {
     char *line;
     int i = 1;
     fp = fopen(filename, "r");
-    while (fgets(line, 100, fp))
-    {
+
+    while (fgets(line, 100, fp)) {
         cout << i++ << " : " << line << endl ;
     }
+
     fclose(fp);
 }
-void addToHistory(char *args)
-{
+
+void addToHistory(char *args) {
     fp = fopen(filename, "a");
     fputs(args, fp);
     fclose(fp);
 }
-int checkCustomInput(char *args)
-{
-    if (strcmp(args, "exit") == 0)
-    {
+
+int checkCustomInput(char *args) {
+    if (strcmp(args, "exit") == 0) {
         cout<< " \n "<<endl;
         return -1;
     }
-    else if (strcmp(args, "history") == 0)
-    {
+    else if (strcmp(args, "history") == 0) {
         viewHistory();
         return 1;
     }
+
     return 0;
 }
 
-int execute(char **args)
-{
+int execute(char **args) {
     pid_t pid = fork();
 
-    if (pid == 0)
-    {
-        if (!strcmp(args[0], "cd") && args[1] != NULL)
-        {
-            if (chdir(args[1]) != 0)
-            {
+    if (pid == 0) {
+        if (!strcmp(args[0], "cd") && args[1] != NULL) {
+            if (chdir(args[1]) != 0) {
                 cout << "Enter Valid Path ! ! \n";
             }
         }
-        else if (execvp(args[0], args) == -1)
-        {
+        else if (execvp(args[0], args) == -1) {
             cout << "Enter valid Command ! !\n";
         }
+
+        exit(0);
     }
-    else if (pid < 0)
-    {
+    else if (pid < 0) {
         cout << "FORK ERROR OCCURED! \n";
     }
-    else
-    {
+    else {
         wait(NULL);
     }
 
     return 1;
 }
-char **parseArgs(char *line)
-{
+char **parseArgs(char *line) {
     int position = 0;
-    char **tokens = (char**)malloc(104 );
+    char **tokens = (char**)malloc(104);
     char *token = NULL;
     token = strtok(line, " \n\t");
-    while (token != NULL)
-    {
+
+    while (token != NULL) {
         tokens[position] = token;
         position++;
         token = strtok(NULL, " \n\t");
     }
+
     tokens[position] = NULL;
     return tokens;
 }
@@ -94,8 +88,6 @@ void MyShell()
    
     cout << "----\t WELCOME TO MY-SHELL\t ----\n\n\n";
     filename = strcat(getenv("HOME"), "/myshellHistory.txt");
-    fp = fopen(filename, "w");
-    fclose(fp);
     while (1)
     {
         char **parsedInput;
@@ -116,7 +108,7 @@ void MyShell()
         if(flg==0)
             execute(parsedInput);
         else if(flg==-1)
-            exit(0);
+            exit(-1);
     }
 }
 
