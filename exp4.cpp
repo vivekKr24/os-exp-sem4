@@ -6,7 +6,7 @@
 #include <sys/wait.h>
 
 void PrintSeq(int n) {
-    std::cout << "From " << getpid() << " " << n << std::endl;
+    std::cout << "From " << getpid() << " " << n << ", from parent " << getppid() << std::endl;
     if (n == 1) return;
     auto pid = fork();
     if (pid == 0) {
@@ -18,5 +18,6 @@ void PrintSeq(int n) {
 }
 
 int main() {
-    PrintSeq(3);
+    int n; std::cin >> n;
+    PrintSeq(n);
 }

@@ -4,6 +4,7 @@
 
 int* fib = new int[100];
 int* n_val = new int[100];
+
 void* F(void* arguments) {
     int n = *((int*)arguments);
     if (n <= 2) return (void*)nullptr;
@@ -32,5 +33,7 @@ int main() {
     std::cin >> fib[0];
 
     F((void*)(n_val + fib[0]));
-    std::cout << fib[fib[0]];
+    for (int i = 1; i <= fib[0]; i++) {
+        std::cout << fib[i] << ' ';
+    }
 }
